@@ -1,19 +1,4 @@
-// ChampionCHIP Xicrc wrapper for the supplied rv32i_core extension hook.
-//
-// Direct mappings to rv32i_core:
-//   ext_funct7    -> ext_funct7
-//   ext_funct3    -> ext_funct3
-//   ext_rs1_data  -> ext_rs1_data
-//   ext_rs2_data  -> ext_rs2_data
-//   ext_ready     <- ext_ready
-//   ext_result    <- ext_result
-//   ext_writeback <- ext_writeback
-//   ext_illegal   <- ext_illegal
-//
-// The rv32i_core itself only consumes these responses for non-base OP_REG
-// encodings, so this wrapper does not need an opcode input.
-//
-// IMPORTANT: If Zmmul and Xicrc share the same core extension hook, their
+// If Zmmul and Xicrc share the same core extension hook, their
 // responses must be combined by an extension router/arbiter. Do not directly
 // drive the same core inputs from two modules.
 
@@ -31,9 +16,6 @@ module xicrc_accelerator_unit #(
     output wire        ext_illegal
 );
 
-    // ChampionCHIP Xicrc encoding:
-    // funct7 = 1000000
-    // funct3 = 000 CRCB, 001 CRCH, 010 CRCW
     wire is_xicrc = (ext_funct7 == 7'b1000000);
     wire valid_variant = (ext_funct3 == 3'b000) ||
                          (ext_funct3 == 3'b001) ||
@@ -51,8 +33,6 @@ module xicrc_accelerator_unit #(
         .crc_result (crc_result)
     );
 
-    // Combinational extension: recognized Xicrc instructions complete in the
-    // current EXECUTE cycle. Unknown extension families are not claimed.
     assign ext_ready     = is_xicrc;
     assign ext_writeback = is_xicrc && valid_variant;
     assign ext_illegal   = is_xicrc && !valid_variant;

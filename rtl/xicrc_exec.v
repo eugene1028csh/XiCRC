@@ -1,20 +1,8 @@
-// ChampionCHIP Xicrc execution datapath
-//
 // Architectural behaviour from the supplied block guide:
 //   CRCB -> process  8 bits of rs1_data
 //   CRCH -> process 16 bits of rs1_data
 //   CRCW -> process 32 bits of rs1_data
 //   result is 16 bits
-//
-// Assumptions NOT specified by the supplied guide and therefore kept explicit:
-//   - rs2_data[15:0] is the incoming/running CRC state
-//   - MSB-first processing
-//   - polynomial default 0x1021
-//   - no reflection and no final XOR
-//
-// Change POLY (or the update function if bit/reflection rules differ) when the
-// official validation specification defines those parameters.
-
 module xicrc_exec #(
     parameter [15:0] POLY = 16'h1021
 ) (
