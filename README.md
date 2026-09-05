@@ -22,6 +22,7 @@ rtl/
 tb/
 ├── xicrc_exec_tb.v
 └── xicrc_accelerator_unit_tb.v
+```
 
 ## Run
 
@@ -46,3 +47,4 @@ vvp wrapper_sim
 
 Expected result:
 ALL XICRC WRAPPER TESTS PASSED
+```
