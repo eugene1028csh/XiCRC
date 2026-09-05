@@ -23,7 +23,9 @@ tb/
 ├── xicrc_exec_tb.v
 └── xicrc_accelerator_unit_tb.v
 
+#Run
 
+```text
 Run CRC Engine + Testbench"
 iverilog -g2012 -o exec_sim \
     rtl/xicrc_exec.v \
