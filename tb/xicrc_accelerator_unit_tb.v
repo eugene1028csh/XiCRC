@@ -27,7 +27,7 @@ module xicrc_accelerator_unit_tb;
         .ext_illegal   (ext_illegal)
     );
 
-    task expect;
+    task check_outputs;
         input [255:0] name;
         input         ready_e;
         input         wb_e;
@@ -58,28 +58,28 @@ module xicrc_accelerator_unit_tb;
         ext_rs2_data = 32'h00000000;
         ext_funct7   = 7'b1000000;
         ext_funct3   = 3'b000;
-        expect("CRCB decode/writeback", 1'b1, 1'b1, 1'b0, 32'h0000D1AD);
+        check_outputs("CRCB decode/writeback", 1'b1, 1'b1, 1'b0, 32'h0000D1AD);
 
         // CRCH
         ext_rs1_data = 32'h00001234;
         ext_rs2_data = 32'h00000000;
         ext_funct3   = 3'b001;
-        expect("CRCH decode/writeback", 1'b1, 1'b1, 1'b0, 32'h000013C6);
+        check_outputs("CRCH decode/writeback", 1'b1, 1'b1, 1'b0, 32'h000013C6);
 
         // CRCW
         ext_rs1_data = 32'h12345678;
         ext_rs2_data = 32'h00000000;
         ext_funct3   = 3'b010;
-        expect("CRCW decode/writeback", 1'b1, 1'b1, 1'b0, 32'h0000B42C);
+        check_outputs("CRCW decode/writeback", 1'b1, 1'b1, 1'b0, 32'h0000B42C);
 
         // Xicrc funct7 with unsupported funct3 is completed as illegal.
         ext_funct3 = 3'b111;
-        expect("invalid Xicrc variant", 1'b1, 1'b0, 1'b1, 32'h00000000);
+        check_outputs("invalid Xicrc variant", 1'b1, 1'b0, 1'b1, 32'h00000000);
 
         // Zmmul funct7 must not be claimed by the CRC unit.
         ext_funct7 = 7'b0000001;
         ext_funct3 = 3'b000;
-        expect("non-Xicrc extension not claimed", 1'b0, 1'b0, 1'b0, 32'h00000000);
+        check_outputs("non-Xicrc extension not claimed", 1'b0, 1'b0, 1'b0, 32'h00000000);
 
         if (errors == 0)
             $display("ALL XICRC WRAPPER TESTS PASSED");
